@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: projectpart5_oj1l_user
+      POSTGRES_PASSWORD: rTcxCejqzCiPrAkVwqYOWJDuBt7ZFHoA
+      POSTGRES_DB: projectpart5_oj1l
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  book_catalog:
+    build: ./book_catalog
+    container_name: book_catalog
+    environment:
+     DATABASE_URL: "postgresql://projectpart5_oj1l_user:rTcxCejqzCiPrAkVwqYOWJDuBt7ZFHoA@dpg-crglns68ii6s73c4tpv0-a.oregon-postgres.render.com/projectpart5_oj1l"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+  inventory_management:
+    build: ./inventory_management
+    container_name: inventory_management
+    environment:
+      DATABASE_URL: "postgresql://projectpart5_oj1l_user:rTcxCejqzCiPrAkVwqYOWJDuBt7ZFHoA@dpg-crglns68ii6s73c4tpv0-a.oregon-postgres.render.com/projectpart5_oj1l"
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
